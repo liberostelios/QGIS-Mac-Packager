@@ -10,10 +10,10 @@ LINK_netcdf=libnetcdf.15.dylib
 DEPS_netcdf=(libcurl)
 
 # url of the package
-URL_netcdf=https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-${VERSION_netcdf}.tar.gz
+URL_netcdf=https://github.com/Unidata/netcdf-c/archive/refs/tags/v${VERSION_netcdf}.tar.gz
 
 # md5 of the package
-MD5_netcdf=9e1d7f13c2aef921c854d87037bcbd96
+MD5_netcdf=5ebcafd3fee1d48559687b5ace414fe8
 
 # default build path
 BUILD_netcdf=$BUILD_PATH/netcdf/$(get_directory $URL_netcdf)

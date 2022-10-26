@@ -10,7 +10,7 @@ LINK_libmysqlclient=libmysqlclient.21.dylib
 DEPS_mysql=(openssl protobuf boost zstd zlib)
 
 # url of the package
-URL_mysql=https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-boost-${VERSION_mysql}.tar.gz
+URL_mysql=https://downloads.mysql.com/archives/get/p/23/file/mysql-boost-$VERSION_mysql.tar.gz
 
 # md5 of the package
 MD5_mysql=27cfcf24fc754b592acd69fd32a3940a

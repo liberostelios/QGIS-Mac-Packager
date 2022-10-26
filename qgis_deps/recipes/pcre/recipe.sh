@@ -3,7 +3,7 @@
 DESC_pcre="Perl compatible regular expressions library"
 
 # version of your package
-VERSION_pcre=8.44
+VERSION_pcre=10.40
 LINK_pcre=libpcre.1.dylib
 
 # dependencies of this recipe
@@ -13,10 +13,10 @@ DEPS_pcre=(
 )
 
 # url of the package
-URL_pcre=https://ftp.pcre.org/pub/pcre/pcre-$VERSION_pcre.tar.bz2
+URL_pcre=https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$VERSION_pcre/pcre2-$VERSION_pcre.tar.bz2
 
 # md5 of the package
-MD5_pcre=cf7326204cc46c755b5b2608033d9d24
+MD5_pcre=a5cc4e276129c177d4fffb40601019a4
 
 # default build path
 BUILD_pcre=$BUILD_PATH/pcre/$(get_directory $URL_pcre)

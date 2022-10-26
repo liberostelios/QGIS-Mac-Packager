@@ -38,7 +38,7 @@ echo "Loading configuration"
 XCODE_DEVELOPER="$(xcode-select -print-path)"
 CORES=$(sysctl -n hw.ncpu)
 export CORES=$CORES
-ARCH=x86_64
+ARCH=arm64
 DO_CLEAN_BUILD=0
 DO_SET_X=0
 DEBUG=0
@@ -84,10 +84,10 @@ function check_config_conf_vars() {
       error "No QT_BASE environment set, abort"
     fi
 
-    if [ -f "$QT_BASE/clang_64/bin/qmake" ]; then
+    if [ -f "$QT_BASE/bin/qmake" ]; then
        debug "Using QT: $QT_BASE"
     else
-       error "The file '$QT_BASE/clang_64/bin/qmake' in not found."
+       error "The file '$QT_BASE/bin/qmake' in not found."
     fi
 
     if [ "X$ROOT_OUT_PATH" == "X" ]; then
@@ -113,20 +113,20 @@ QGIS_SITE_PACKAGES_PATH=${STAGE_PATH}/lib/python${VERSION_major_python}/site-pac
 BUILD_CONFIG_FILE="${STAGE_PATH}/qgis-deps.config"
 
 function add_homebrew_path() {
-   # info "Adding /usr/local/opt/$1/bin to PATH"
-   if [ ! -d "/usr/local/opt/$1/bin" ]; then
-     error "Missing homebrew $1 /usr/local/opt/$1/bin"
+   # info "Adding /opt/homebrew/opt/$1/bin to PATH"
+   if [ ! -d "/opt/homebrew/opt/$1/bin" ]; then
+     error "Missing homebrew $1 /opt/homebrew/opt/$1/bin"
    fi
-   export PATH="/usr/local/opt/$1/bin:$PATH"
+   export PATH="/opt/homebrew/opt/$1/bin:$PATH"
 }
 
 function check_file_configuration() {
-  # "Checking $1 for /usr/local/lib"
-  if grep -q /usr/local/lib $1
+  # "Checking $1 for /opt/homebrew/lib"
+  if grep -q /opt/homebrew/lib $1
   then
     info "Found: "
-    cat $1 | grep /usr/local/lib
-    error "File $1 contains /usr/local/lib string <-- CMake picked some homebrew libs!"
+    cat $1 | grep /opt/homebrew/lib
+    error "File $1 contains /opt/homebrew/lib string <-- CMake picked some homebrew libs!"
   fi
 
   targets=(
@@ -138,11 +138,11 @@ function check_file_configuration() {
   )
   for i in ${targets[*]}
   do
-    if grep -q /usr/local/opt/$i/lib $1
+    if grep -q /opt/homebrew/opt/$i/lib $1
     then
       info "Found: "
-      cat $1 | grep /usr/local/opt/$i/lib
-      error "File $1 contains /usr/local/$i/lib string <-- CMake picked some homebrew libs!"
+      cat $1 | grep /opt/homebrew/opt/$i/lib
+      error "File $1 contains /opt/homebrew/$i/lib string <-- CMake picked some homebrew libs!"
     fi
   done
 }
@@ -175,12 +175,12 @@ function python_package_installed_verbose() {
 }
 
 function patch_configure_file() {
-    try ${SED} 's;/usr/local/lib/ ;;g' $1
-    try ${SED} 's; /usr/local/lib/;;g' $1
-    try ${SED} 's;/usr/local/lib/;;g' $1
-    try ${SED} 's; /usr/local/lib;;g' $1
-    try $SED 's;/usr/local/lib ;;g' $1
-    try $SED 's;/usr/local/lib;;g' $1
+    try ${SED} 's;/opt/homebrew/lib/ ;;g' $1
+    try ${SED} 's; /opt/homebrew/lib/;;g' $1
+    try ${SED} 's;/opt/homebrew/lib/;;g' $1
+    try ${SED} 's; /opt/homebrew/lib;;g' $1
+    try $SED 's;/opt/homebrew/lib ;;g' $1
+    try $SED 's;/opt/homebrew/lib;;g' $1
 }
 
 function patch_qmake_pri_file() {
@@ -243,17 +243,17 @@ function push_env() {
     export LDFLAGS="-L$STAGE_PATH/lib"
     export CXXFLAGS="${CFLAGS}"
 
-    export PATH="${PATH}:${XCODE_DEVELOPER}/usr/bin:$STAGE_PATH/bin:$QT_BASE/clang_64/bin"
+    export PATH="${PATH}:${XCODE_DEVELOPER}/usr/bin:$STAGE_PATH/bin:$QT_BASE/bin"
 
     # export some tools
-    export MAKESMP="/usr/bin/make -j$CORES"
-    export MAKE="/usr/bin/make"
+    export MAKESMP="/opt/homebrew/opt/make/libexec/gnubin/make -j$CORES"
+    export MAKE="/opt/homebrew/opt/make/libexec/gnubin/make"
     export CONFIGURE="./configure --prefix=$STAGE_PATH"
     export CC="/usr/bin/clang"
     export CXX="/usr/bin/clang++"
     export OBJCXX=${CXX}
     export OBJC=${CC}
-    export NINJA="/usr/local/bin/ninja"
+    export NINJA="/opt/homebrew/bin/ninja"
     export LD="/usr/bin/ld"
     export PKG_CONFIG_PATH=$STAGE_PATH/lib/pkgconfig
 
@@ -271,7 +271,7 @@ function push_env() {
       CMAKE="${CMAKE} -DCMAKE_BUILD_TYPE=Release"
     fi
     export CMAKE="${CMAKE} -DCMAKE_INSTALL_PREFIX:PATH=$STAGE_PATH"
-    export CMAKE="${CMAKE} -DCMAKE_PREFIX_PATH=$STAGE_PATH;$QT_BASE/clang_64"
+    export CMAKE="${CMAKE} -DCMAKE_PREFIX_PATH=$STAGE_PATH;$QT_BASE"
     export CMAKE="${CMAKE} -DCMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH=FALSE"
     export CMAKE="${CMAKE} -DCMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH=FALSE"
     export CMAKE="${CMAKE} -DCMAKE_MACOSX_RPATH=OFF"
@@ -355,10 +355,10 @@ function get_directory() {
 
 function check_linked_rpath() {
   cd ${STAGE_PATH}
-  if otool -L $1 | grep -q /usr/local
+  if otool -L $1 | grep -q /opt/homebrew
   then
     otool -L $1
-    error "$1 contains /usr/local string <-- CMake picked some homebrew libs!"
+    error "$1 contains /opt/homebrew string <-- CMake picked some homebrew libs!"
   fi
 
   # the binaries cannot contain reference to build path since this path is not present when
