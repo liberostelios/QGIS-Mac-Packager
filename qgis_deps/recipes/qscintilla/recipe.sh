@@ -61,6 +61,7 @@ function build_qscintilla() {
   push_env
 
   cd Qt4Qt5
+  QMAKE="qmake -config release"
   try ${QMAKE} qscintilla.pro
 
   try $MAKESMP

@@ -94,10 +94,12 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DWITH_CUSTOM_WIDGETS=ON \
       -DQT_PLUGINS_DIR:PATH=$QGIS_INSTALL_DIR/plugins \
       -DENABLE_TESTS=FALSE \
-      -GNinja -DCMAKE_MAKE_PROGRAM=/usr/local/bin/ninja\
+      -GNinja -DCMAKE_MAKE_PROGRAM=/opt/homebrew/bin/ninja\
       -DCMAKE_OSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET \
       -DCMAKE_INSTALL_PREFIX:PATH=$QGIS_INSTALL_DIR \
       -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX \
+      -DGEOS_INCLUDE_DIR=/opt/homebrew/opt/geos/include -DGEOS_LIBRARY=/opt/homebrew/opt/geos/lib/libgeos_c.dylib \
+      -DGDAL_INCLUDE_DIR=/opt/homebrew/opt/gdal/include -DGDAL_LIBRARY=/opt/homebrew/opt/gdal/lib/libgdal.dylib \
       "$QGIS_SOURCE_DIR" > cmake.configure 2>&1
 
 # check we use correct deps

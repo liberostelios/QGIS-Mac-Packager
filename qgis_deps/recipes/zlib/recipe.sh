@@ -3,7 +3,7 @@
 DESC_zlib="General-purpose lossless data-compression library"
 
 # version of your package
-VERSION_zlib=1.2.12
+VERSION_zlib=1.2.13
 LINK_zlib=libz.1.dylib
 
 # dependencies of this recipe
@@ -13,7 +13,7 @@ DEPS_zlib=()
 URL_zlib=https://zlib.net/zlib-${VERSION_zlib}.tar.gz
 
 # md5 of the package
-MD5_zlib=5fc414a9726be31427b440b434d05f78
+MD5_zlib=9b8aa094c4e5765dabf4da391f00d15c
 
 # default build path
 BUILD_zlib=$BUILD_PATH/zlib/$(get_directory $URL_zlib)

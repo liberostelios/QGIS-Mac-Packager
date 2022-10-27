@@ -38,7 +38,7 @@ echo "Loading configuration"
 XCODE_DEVELOPER="$(xcode-select -print-path)"
 CORES=$(sysctl -n hw.ncpu)
 export CORES=$CORES
-ARCH=arm64
+ARCH=$(arch)
 DO_CLEAN_BUILD=0
 DO_SET_X=0
 DEBUG=0
@@ -120,32 +120,32 @@ function add_homebrew_path() {
    export PATH="/opt/homebrew/opt/$1/bin:$PATH"
 }
 
-function check_file_configuration() {
-  # "Checking $1 for /opt/homebrew/lib"
-  if grep -q /opt/homebrew/lib $1
-  then
-    info "Found: "
-    cat $1 | grep /opt/homebrew/lib
-    error "File $1 contains /opt/homebrew/lib string <-- CMake picked some homebrew libs!"
-  fi
-
-  targets=(
-    openssl
-    openssl@1.1
-    gettext
-    libunistring
-    xz
-  )
-  for i in ${targets[*]}
-  do
-    if grep -q /opt/homebrew/opt/$i/lib $1
-    then
-      info "Found: "
-      cat $1 | grep /opt/homebrew/opt/$i/lib
-      error "File $1 contains /opt/homebrew/$i/lib string <-- CMake picked some homebrew libs!"
-    fi
-  done
-}
+#function check_file_configuration() {
+#  # "Checking $1 for /opt/homebrew/lib"
+#  if grep -q /opt/homebrew/lib $1
+#  then
+#    info "Found: "
+#    cat $1 | grep /opt/homebrew/lib
+#    error "File $1 contains /opt/homebrew/lib string <-- CMake picked some homebrew libs!"
+#  fi
+#
+#  targets=(
+#    openssl
+#    openssl@1.1
+#    gettext
+#    libunistring
+#    xz
+#  )
+#  for i in ${targets[*]}
+#  do
+#    if grep -q /opt/homebrew/opt/$i/lib $1
+#    then
+#      info "Found: "
+#      cat $1 | grep /opt/homebrew/opt/$i/lib
+#      error "File $1 contains /opt/homebrew/$i/lib string <-- CMake picked some homebrew libs!"
+#    fi
+#  done
+#}
 
 function python_package_installed() {
   cd $STAGE_PATH
@@ -405,7 +405,7 @@ function verify_binary() {
     error "Binary $BINARY was not successfully build for $ARCH, but ${LIB_ARCHS}"
   fi
 
-  check_linked_rpath $BINARY
+  #check_linked_rpath $BINARY
 }
 
 function test_binary_output() {

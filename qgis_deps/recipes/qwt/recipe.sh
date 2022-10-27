@@ -52,7 +52,7 @@ function build_qwt() {
   try rsync -a $BUILD_qwt/ $BUILD_PATH/qwt/build-$ARCH/
   try cd $BUILD_PATH/qwt/build-$ARCH
   push_env
-
+  QMAKE="qmake -config release"
   try ${QMAKE}
 
   try $MAKESMP

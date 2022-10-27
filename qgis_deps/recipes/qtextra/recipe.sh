@@ -60,7 +60,7 @@ function build_qtextra() {
   cd src/plugins/sqldrivers/
   try ${SED} 's;-liodbc;-lodbc;g' configure.json
   rm -f config.cache
-
+  QMAKE="qmake -config release"
   try ${QMAKE} -- \
     ODBC_PREFIX=$STAGE_PATH/unixodbc \
     PSQL_INCDIR=$STAGE_PATH/include \

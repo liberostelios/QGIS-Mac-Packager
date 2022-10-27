@@ -3,7 +3,7 @@
 DESC_postgres="Postgres database"
 
 # version of your package
-VERSION_postgres=12.3
+VERSION_postgres=15.0
 
 LINK_libpq=libpq.5.dylib
 
@@ -14,7 +14,7 @@ DEPS_postgres=(openssl)
 URL_postgres=https://ftp.postgresql.org/pub/source/v${VERSION_postgres}/postgresql-${VERSION_postgres}.tar.bz2
 
 # md5 of the package
-MD5_postgres=a30c023dd7088e44d73be71af2ef404a
+MD5_postgres=9516690cc6554dacc4a4d0920834a623
 
 # default build path
 BUILD_postgres=$BUILD_PATH/postgres/$(get_directory $URL_postgres)
@@ -54,6 +54,8 @@ function build_postgres() {
     --disable-debug \
     --enable-rpath \
     --with-openssl \
+    --with-zstd \
+    --with-lz4 \
     --enable-static=no
 
   check_file_configuration config.status
@@ -63,7 +65,7 @@ function build_postgres() {
   try $MAKE -C src/bin install
   try $MAKE -C src/include install
   try $MAKE -C src/interfaces install
-  try $MAKE -C doc install
+  #try $MAKE -C doc install
 
   pop_env
 }

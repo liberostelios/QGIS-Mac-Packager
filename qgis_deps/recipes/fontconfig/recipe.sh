@@ -3,18 +3,18 @@
 DESC_fontconfig="fontconfig"
 
 # version of your package
-VERSION_fontconfig=2.13.92
+VERSION_fontconfig=2.14.0
 
 LINK_fontconfig=libfontconfig.1.dylib
 
 # dependencies of this recipe
-DEPS_fontconfig=(libtool gettext freetype png brotli)
+DEPS_fontconfig=(libtool gettext freetype png brotli python)
 
 # url of the package
 URL_fontconfig=https://www.freedesktop.org/software/fontconfig/release/fontconfig-$VERSION_fontconfig.tar.gz
 
 # md5 of the package
-MD5_fontconfig=eda1551685c25c4588da39222142f063
+MD5_fontconfig=4034f1d508cf230517f01b42764710d0
 
 # default build path
 BUILD_fontconfig=$BUILD_PATH/fontconfig/$(get_directory $URL_fontconfig)
@@ -58,13 +58,18 @@ function build_fontconfig() {
   export GETTEXTIZE="ggettextize"
   export AUTOPOINT="gautopoint"
   export PKG_CONFIG_PATH=$STAGE_PATH/lib/pkgconfig
+  export PYTHON=/opt/homebrew/bin/python3
+  try ${CONFIGURE} --disable-dependency-tracking \
+                   --disable-silent-rules \
+                   --disable-docs \
+		   --with-python_prefix=/opt/homebrew \
+		   --with-python-exec-prefix=/opt/homebrew
 
-  try ${CONFIGURE}
 
   check_file_configuration config.status
 
-  try $MAKESMP
-  try $MAKE install
+  #try $MAKESMP
+  try $MAKE install "RUN_FC_CACHE_TEST=false"
 
   unset LIBTOOLIZE
   unset GETTEXTIZE

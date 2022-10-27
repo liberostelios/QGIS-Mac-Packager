@@ -4,7 +4,7 @@ DESC_pcre="Perl compatible regular expressions library"
 
 # version of your package
 VERSION_pcre=10.40
-LINK_pcre=libpcre.1.dylib
+LINK_pcre=libpcre2-8.dylib
 
 # dependencies of this recipe
 DEPS_pcre=(
@@ -55,9 +55,9 @@ function build_pcre() {
   try ${CONFIGURE} \
       --disable-dependency-tracking \
       --enable-utf8 \
-      --enable-pcre8 \
-      --enable-pcre16 \
-      --enable-pcre32 \
+      --enable-pcre2-8 \
+      --enable-pcre2-16 \
+      --enable-pcre2-32 \
       --enable-unicode-properties \
       --enable-pcregrep-libz \
       --enable-pcregrep-libbz2

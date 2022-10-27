@@ -5,7 +5,7 @@ DESC_openssl="Cryptography and SSL/TLS Toolkit"
 # version of your package
 # NOTE openssl version must be compatible with QT version, for example
 # for Qt 5.14 see https://wiki.qt.io/Qt_5.14.1_Known_Issues
-VERSION_openssl=1.1.1h
+VERSION_openssl=1.1.1r
 
 # dependencies of this recipe
 DEPS_openssl=()
@@ -18,7 +18,7 @@ LINK_libcrypto=libcrypto.${LINK_libssl_version}.dylib
 URL_openssl=https://github.com/openssl/openssl/archive/OpenSSL_${VERSION_openssl//./_}.tar.gz
 
 # md5 of the package
-MD5_openssl=e365330dabdc29bb8b5d2984f14d2e62
+MD5_openssl=6fde0a1133ef6044dea0d2a033d9f7a4
 
 # default build path
 BUILD_openssl=$BUILD_PATH/openssl/$(get_directory $URL_openssl)
@@ -64,12 +64,14 @@ function build_openssl() {
   try perl ./Configure \
     --prefix=$STAGE_PATH \
     --openssldir=$STAGE_PATH \
-    darwin64-x86_64-cc enable-ec_nistp_64_gcc_128 \
+    darwin64-${ARCH}-cc \
+    enable-ec_nistp_64_gcc_128 \
     no-ssl3 \
     no-ssl3-method \
     no-zlib \
 
   check_file_configuration config.status
+  try $MAKESMP clean
   try $MAKESMP
   try $MAKESMP install
 
